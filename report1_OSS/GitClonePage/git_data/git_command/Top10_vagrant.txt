@@ -1,0 +1,10 @@
+  5979	Mitchell Hashimoto
+  2823	Chris Roberts
+  1505	Brian Cain
+  1292	sophia
+  1140	Seth Vargo
+   219	Sophia Castellarin
+   214	Gilles Cornu
+   195	Paul Hinze
+   131	Jeff Bonhag
+   116	Fabio Rehm

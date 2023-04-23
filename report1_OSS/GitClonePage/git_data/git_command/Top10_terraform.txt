@@ -1,0 +1,10 @@
+  4025	Mitchell Hashimoto
+  3527	James Bardin
+  2494	Martin Atkins
+  1567	Paul Stack
+  1327	Paul Hinze
+  1302	Radek Simko
+  1118	James Nugent
+   915	Clint
+   766	Alisdair McDiarmid
+   640	Sander van Harmelen
