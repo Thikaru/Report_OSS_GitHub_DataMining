@@ -9,6 +9,7 @@ import Setting.common_settings as CommonSettings
 import Controller.common_controller as CommonController
 import Controller.data_analysis_mode_controller as DataAnalysisModeController
 import Controller.data_mining_mode_controller as DataMiningController
+import Controller.data_mining_OSSReport_Controller as DataMiningOSSReportController
 
 
 ## =================##
@@ -45,4 +46,7 @@ if __name__ == '__main__':
             DataMiningController.DataMiningModeEventHandler()
             # データ分析処理のイベントなのかを判定する
             DataAnalysisModeController.DataAnalysisModeEventHandler()
+            # OSS課題データマイニングモードイベントなのかを判定する
+            DataMiningOSSReportController.DataMiningOSSReportEventHandler()
+    DataMiningOSSReportController.DeleteGithubRepository()
     CommonSettings.Window.close()

@@ -16,10 +16,11 @@ def make_top_page_window():
     col_button = [
         [sg.Button('GitHubリポジトリコミットデータをJSONで取得', font=(CommonSettings.HG_SEMI_CURSIVE, 15), size=(20, 1), key='-data-mining-setting-mode-'),
          sg.Button('GitHubのJSONデータ分析', font=(CommonSettings.HG_SEMI_CURSIVE, 15), size=(20, 1), key='-analysis-json-mode-')],
-        # [sg.Button('輪郭検出処理(高機能版)', font=(CommonSettings.HG_SEMI_CURSIVE, 15), size=(20, 1), key='-high-outline-detect-mode-'),
-        #  sg.Button('バケツ塗り機能', font=(CommonSettings.HG_SEMI_CURSIVE, 15), size=(20, 1), key='-filled-mode-')],
-        [sg.Button('終了', font=(CommonSettings.HG_SEMI_CURSIVE, 15),
-                   size=(20, 1), key='-Quit-')],
+        [sg.Button('OSS課題用データマイニングモードへ', font=(CommonSettings.HG_SEMI_CURSIVE, 15), size=(
+            20, 1), key='-github-data-mining-setting-'),
+         sg.Button('終了', font=(CommonSettings.HG_SEMI_CURSIVE, 15), size=(20, 1), key='-Quit-')],
+        # [sg.Button('終了', font=(CommonSettings.HG_SEMI_CURSIVE, 15),
+        #            size=(20, 1), key='-Quit-')],
     ]
     ## ==================##
 
