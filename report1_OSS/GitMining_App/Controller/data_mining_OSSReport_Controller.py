@@ -39,6 +39,7 @@ def DataMiningOSSReportEventHandler():
         DataMiningOSSReportWindow.MakeDecideDataMiningOptionDMORPage()
     elif CommonSetting.Event == '-data-mining-analysis-':
         print("-data-mining-setting-")
+        SetFileName()
         if DataMiningOSSReportSetting.data_mining_menu_option == 0:
             print("日毎のコミット数を累積棒グラフ出力")
             DatePerCommitOutputGraph()
@@ -68,7 +69,7 @@ def GithubRepositoryClone():
     print("GitHubから指定したリポジトリをクローンする")
     # Git cloneする
     subprocess.run(['git', 'clone', DataMiningOSSReportSetting.GITHUB_CLONE_PREFIX +
-                   DataMiningOSSReportSetting.GitHub_Repository_creater+'/'+DataMiningOSSReportSetting.GitHub_Repository_name], cwd='GitHubRepository')
+                   DataMiningOSSReportSetting.GitHub_Repository_creater+'/'+DataMiningOSSReportSetting.GitHub_Repository_name], cwd=DataMiningOSSReportSetting.GITHUB_REPOSITORY)
     print('Git Clone終了 : ' + DataMiningOSSReportSetting.GITHUB_CLONE_PREFIX +
           DataMiningOSSReportSetting.GitHub_Repository_creater+'/'+DataMiningOSSReportSetting.GitHub_Repository_name)
 
@@ -88,12 +89,37 @@ def DeleteGithubRepository():
 
 
 ######## ==================== ########
+# ファイル名を変数に格納
+######## ==================== ########
+def SetFileName():
+    if DataMiningOSSReportSetting.data_mining_menu_option == 0:
+        print("日毎のコミット数を累積棒グラフ出力")
+        DataMiningOSSReportSetting.date_commit_csv = CommonSetting.Value['-date-commit-csv-']
+        DataMiningOSSReportSetting.date_commit_sum_csv = CommonSetting.Value[
+            '-date-commit-sum-csv-']
+        DataMiningOSSReportSetting.date_commit_graph = CommonSetting.Value['-date-commit-graph-']
+    elif DataMiningOSSReportSetting.data_mining_menu_option == 1:
+        print("コミット数TOP10の棒グラフを出力")
+        DataMiningOSSReportSetting.commiter_csv = CommonSetting.Value['-commiter-csv-']
+        DataMiningOSSReportSetting.commit_top10_graph = CommonSetting.Value[
+            '-commit-top10-graph-']
+    elif DataMiningOSSReportSetting.data_mining_menu_option == 2:
+        print("コミットメッセージの文字数の分布を分析")
+        DataMiningOSSReportSetting.commit_message_csv = CommonSetting.Value[
+            '-commit-message-csv-']
+        DataMiningOSSReportSetting.commit_message_txt = CommonSetting.Value[
+            '-commit-message-txt-']
+        DataMiningOSSReportSetting.commit_message_graph = CommonSetting.Value[
+            '-commit-message-graph-']
+
+
+######## ==================== ########
 # 日毎のコミット数を累積棒グラフ出力
 ######## ==================== ########
 def DatePerCommitOutputGraph():
     print("日毎のコミット数を累積棒グラフ出力")
     result = subprocess.run(
-        ["git", "log", "--pretty=format:\"%cd\"", "--date=short"], cwd='GitHubRepository/'+DataMiningOSSReportSetting.GitHub_Repository_name, stdout=subprocess.PIPE)
+        ["git", "log", "--pretty=format:\"%cd\"", "--date=short"], cwd=DataMiningOSSReportSetting.GITHUB_REPOSITORY+DataMiningOSSReportSetting.GitHub_Repository_name, stdout=subprocess.PIPE)
     # 出力を文字列に変換
     output = result.stdout.decode("utf-8")
     # 行ごとに分割し、日付でカウント
@@ -106,9 +132,9 @@ def DatePerCommitOutputGraph():
             counts[date] += 1
 
     file_terraform = open(
-        'Output_Mining_Data/csv/commit_date/commit_num_per_date_terraform.csv', 'w')
+        DataMiningOSSReportSetting.DATA_MINING_DIR_CSV+DataMiningOSSReportSetting.COMMIT_PER_DATE+DataMiningOSSReportSetting.date_commit_csv+'.csv', 'w')
     file_sum_terraform = open(
-        'Output_Mining_Data/csv/commit_date/commit_num_per_date_sum_terraform.csv', 'w')
+        DataMiningOSSReportSetting.DATA_MINING_DIR_CSV+DataMiningOSSReportSetting.COMMIT_PER_DATE+DataMiningOSSReportSetting.date_commit_sum_csv+'.csv', 'w')
     file_terraform.write("date,commit_count\n")
     file_sum_terraform.write("date,commit_sum_count\n")
 
@@ -146,14 +172,15 @@ def DatePerCommitOutputGraph():
     ax.set_xticks([pd.Timestamp(f'{year}-01-01') for year in years])
     ax.set_xticklabels(years)
     # グラフのタイトルと軸ラベルを設定
-    ax.set_title('Daily Cumulative Commits[Terraform]')
+    ax.set_title(
+        'Daily Cumulative Commits['+DataMiningOSSReportSetting.GitHub_Repository_name+"]")
     ax.set_xlabel('Year')
     ax.set_ylabel('Cumulative Commits')
     # X軸のラベルを90度回転して表示
     plt.xticks(rotation=30)
     # グラフの保存
     plt.savefig(
-        "Output_Mining_Data/graph/commit_date/Commit_num_date_terraform.png")
+        DataMiningOSSReportSetting.DATA_MINING_DIR_GRAPH+DataMiningOSSReportSetting.COMMIT_PER_DATE+DataMiningOSSReportSetting.date_commit_graph+".png")
 
 
 ######## ==================== ########
@@ -162,7 +189,7 @@ def DatePerCommitOutputGraph():
 def CommitTop10OutputGraph():
     # gitコマンドを実行し、結果をバイト文字列として取得
     output = subprocess.check_output(
-        ['git', 'shortlog', '-s', '-n'], cwd='GitHubRepository/'+DataMiningOSSReportSetting.GitHub_Repository_name,)
+        ['git', 'shortlog', '-s', '-n'], cwd=DataMiningOSSReportSetting.GITHUB_REPOSITORY+DataMiningOSSReportSetting.GitHub_Repository_name,)
     # バイト文字列を文字列に変換
     output = output.decode('utf-8')
     # 改行文字で分割してリストにする
@@ -170,7 +197,7 @@ def CommitTop10OutputGraph():
 
     # コミット作成者のコミット数のCSVを作成
     file_terraform = open(
-        'Output_Mining_Data/csv/commiter_info/creator_commit_num_'+DataMiningOSSReportSetting.GitHub_Repository_name+'.csv', 'w')
+        DataMiningOSSReportSetting.DATA_MINING_DIR_CSV+DataMiningOSSReportSetting.CREATOR_COMMIT_NUM+DataMiningOSSReportSetting.commiter_csv+'.csv', 'w')
     file_terraform.write("author, commit_count\n")
 
     commiter_commit_rank = []
@@ -192,7 +219,8 @@ def CommitTop10OutputGraph():
     plt.bar(x_data, y_data)
 
     # グラフのタイトルや軸ラベルを設定
-    plt.title('Top 10 Commiters by Commit Count[Terraform]')
+    plt.title(
+        'Top 10 Commiters by Commit Count['+DataMiningOSSReportSetting.GitHub_Repository_name+']')
     plt.xlabel('Author')
     plt.ylabel('Commit Count')
 
@@ -200,7 +228,7 @@ def CommitTop10OutputGraph():
     plt.xticks(rotation=30)
 
     plt.savefig(
-        "Output_Mining_Data/graph/commiter_info/Top10_Commit_" + DataMiningOSSReportSetting.GitHub_Repository_name + ".png")
+        DataMiningOSSReportSetting.DATA_MINING_DIR_GRAPH+DataMiningOSSReportSetting.CREATOR_COMMIT_NUM+DataMiningOSSReportSetting.commit_top10_graph + ".png")
 
 
 ######## ==================== ########
@@ -210,13 +238,13 @@ def CommitMessageRangeOutputGraph():
     print('コミットメッセージの文字数の分布を分析')
     # Git logコマンドでコミットログを取得する
     vagrant_result = subprocess.run(['git', 'log', '--oneline'],
-                                    cwd='GitHubRepository/'+DataMiningOSSReportSetting.GitHub_Repository_name, stdout=subprocess.PIPE)
+                                    cwd=DataMiningOSSReportSetting.GITHUB_REPOSITORY+DataMiningOSSReportSetting.GitHub_Repository_name, stdout=subprocess.PIPE)
 
     # コミットメッセージとコミットをCSVファイルに保存する
     commit_file_pointer = open(
-        "Output_Mining_Data/csv/commit_message/Commit_message_num" + DataMiningOSSReportSetting.GitHub_Repository_name + ".csv", "w")
+        DataMiningOSSReportSetting.DATA_MINING_DIR_CSV+DataMiningOSSReportSetting.COMMIT_MESSAGE_WORDS+DataMiningOSSReportSetting.commit_message_csv + ".csv", "w")
     commit_detail_file_pointer = open(
-        "Output_Mining_Data/text/commit_message/Commit_message_MaxMin" + DataMiningOSSReportSetting.GitHub_Repository_name + ".txt", "w")
+        DataMiningOSSReportSetting.DATA_MINING_DIR_TEXT+DataMiningOSSReportSetting.COMMIT_MESSAGE_WORDS+DataMiningOSSReportSetting.commit_message_txt + ".txt", "w")
 
     commit_file_pointer.write("words,commit_message\n")
     # 各コミットメッセージの文字の長さを計算する
@@ -244,8 +272,10 @@ def CommitMessageRangeOutputGraph():
     hist, bin_edges = np.histogram(
         message_lengths, bins=range(0, max+10, 10))
 
-    print("vagrant max : " + str(max))
-    print("vagrant min : " + str(min))
+    # print(DataMiningOSSReportSetting.GitHub_Repository_name +
+    #       " max message words: " + str(max))
+    # print(DataMiningOSSReportSetting.GitHub_Repository_name +
+    #       " min message words: " + str(min))
     # 結果の表示
     for i, count in enumerate(hist):
         commit_detail_file_pointer.write(
@@ -267,11 +297,12 @@ def CommitMessageRangeOutputGraph():
         plt.text(bin_edges[i], hist[i], str(hist[i]),
                  fontsize=10, ha='center', va='bottom')
     # 軸ラベルの設定
-    plt.title('Commit Num Hist[Vagrant]')
+    plt.title(
+        'Commit Num Hist['+DataMiningOSSReportSetting.GitHub_Repository_name+']')
     plt.xlabel('Words')
     plt.ylabel('Commit Num')
     # グリッド線の表示
     plt.grid(True)
     # グラフの保存
     plt.savefig(
-        "Output_Mining_Data/graph/commit_message/Commit_message_num_" + DataMiningOSSReportSetting.GitHub_Repository_name + ".png")
+        DataMiningOSSReportSetting.DATA_MINING_DIR_GRAPH+DataMiningOSSReportSetting.COMMIT_MESSAGE_WORDS+DataMiningOSSReportSetting.commit_message_graph + ".png")
