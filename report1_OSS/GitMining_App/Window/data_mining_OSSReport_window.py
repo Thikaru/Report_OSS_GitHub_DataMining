@@ -83,29 +83,31 @@ def MakeDecideDataMiningOptionDMORPage():
             [sg.Text('日毎のコミット数を累積棒グラフで出力する分析', font=(
                 CommonSetting.HG_SEMI_CURSIVE, 20))],
             [sg.Text('日毎のコミット回数をCSVに保存する名前※.csvはあってもなくても良い', font=(CommonSetting.HG_SEMI_CURSIVE, 20)),
-             sg.InputText(default_text=DataMiningOSSReportSetting.GitHub_Repository_name, font=(CommonSetting.HG_SEMI_CURSIVE, 20), size=(10, 1), key='-date-commit-csv-')],
+             sg.InputText(default_text='commit_num_per_date_'+DataMiningOSSReportSetting.GitHub_Repository_name, font=(CommonSetting.HG_SEMI_CURSIVE, 20), size=(10, 1), key='-date-commit-csv-')],
+            [sg.Text('日毎のコミット回数合計したものをCSVに保存する名前※.csvはあってもなくても良い', font=(CommonSetting.HG_SEMI_CURSIVE, 20)),
+             sg.InputText(default_text='commit_num_per_date_sum_'+DataMiningOSSReportSetting.GitHub_Repository_name, font=(CommonSetting.HG_SEMI_CURSIVE, 20), size=(10, 1), key='-date-commit-sum-csv-')],
             [sg.Text('作成された図を保存するファイル名を指定※.pngはあってもなくても良い', font=(CommonSetting.HG_SEMI_CURSIVE, 20)),
-                sg.InputText(default_text=DataMiningOSSReportSetting.GitHub_Repository_name, font=(CommonSetting.HG_SEMI_CURSIVE, 20), size=(10, 1), key='-date-commit-graph-')],
+                sg.InputText(default_text="Commit_num_date_"+DataMiningOSSReportSetting.GitHub_Repository_name, font=(CommonSetting.HG_SEMI_CURSIVE, 20), size=(10, 1), key='-date-commit-graph-')],
         ]
     elif DataMiningOSSReportSetting.data_mining_menu_option == 1:
         col_inputFile_data_mining = [
             [sg.Text('コミット数TOP10の棒グラフを分析', font=(
                 CommonSetting.HG_SEMI_CURSIVE, 20))],
             [sg.Text('コミットを行った人のコミット数のデータを保存するCSVの名前※.csvはあってもなくても良い', font=(CommonSetting.HG_SEMI_CURSIVE, 20)),
-             sg.InputText(default_text=DataMiningOSSReportSetting.GitHub_Repository_name, font=(CommonSetting.HG_SEMI_CURSIVE, 20), size=(10, 1), key='-commit-top10-csv-')],
+             sg.InputText(default_text='creator_commit_num_'+DataMiningOSSReportSetting.GitHub_Repository_name, font=(CommonSetting.HG_SEMI_CURSIVE, 20), size=(10, 1), key='-commiter-csv-')],
             [sg.Text('作成された図を保存するファイル名を指定※.pngはあってもなくても良い', font=(CommonSetting.HG_SEMI_CURSIVE, 20)),
-                sg.InputText(default_text=DataMiningOSSReportSetting.GitHub_Repository_name, font=(CommonSetting.HG_SEMI_CURSIVE, 20), size=(10, 1), key='-commit-top10-graph-')],
+                sg.InputText(default_text="Top10_Commit_" + DataMiningOSSReportSetting.GitHub_Repository_name, font=(CommonSetting.HG_SEMI_CURSIVE, 20), size=(10, 1), key='-commit-top10-graph-')],
         ]
     elif DataMiningOSSReportSetting.data_mining_menu_option == 2:
         col_inputFile_data_mining = [
             [sg.Text('コミットメッセージの文字数の分布を分析', font=(
                 CommonSetting.HG_SEMI_CURSIVE, 20))],
             [sg.Text('コミットメッセージと文字数のデータをCSVに保存する名前※.csvはあってもなくても良い', font=(CommonSetting.HG_SEMI_CURSIVE, 20)),
-             sg.InputText(default_text=DataMiningOSSReportSetting.GitHub_Repository_name, font=(CommonSetting.HG_SEMI_CURSIVE, 20), size=(10, 1), key='-commit-message-csv-')],
+             sg.InputText(default_text="Commit_message_words" + DataMiningOSSReportSetting.GitHub_Repository_name, font=(CommonSetting.HG_SEMI_CURSIVE, 20), size=(10, 1), key='-commit-message-csv-')],
             [sg.Text('コミット文字数の平均最大最小コミット数などを書き出すTXTに保存する名前※.txtはあってもなくても良い', font=(CommonSetting.HG_SEMI_CURSIVE, 20)),
-             sg.InputText(default_text=DataMiningOSSReportSetting.GitHub_Repository_name, font=(CommonSetting.HG_SEMI_CURSIVE, 20), size=(10, 1), key='-commit-message-txt-')],
+             sg.InputText(default_text="Commit_message_MaxMin" + DataMiningOSSReportSetting.GitHub_Repository_name, font=(CommonSetting.HG_SEMI_CURSIVE, 20), size=(10, 1), key='-commit-message-txt-')],
             [sg.Text('作成された図を保存するファイル名を指定※.pngはあってもなくても良い', font=(CommonSetting.HG_SEMI_CURSIVE, 20)),
-                sg.InputText(default_text=DataMiningOSSReportSetting.GitHub_Repository_name, font=(CommonSetting.HG_SEMI_CURSIVE, 20), size=(10, 1), key='-commit-message-graph-')],
+                sg.InputText(default_text="Commit_message_words_" + DataMiningOSSReportSetting.GitHub_Repository_name, font=(CommonSetting.HG_SEMI_CURSIVE, 20), size=(10, 1), key='-commit-message-graph-')],
         ]
 
     col_executeButton = [
