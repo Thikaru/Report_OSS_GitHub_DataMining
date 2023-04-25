@@ -1,3 +1,6 @@
 *.png
 *.pdf
 *.csv
+*.txt
+!/report1_OSS/GitMining_App/Image/oss_1200.png
+# /report1_OSS/GitMining_App/GitHubRepository/
