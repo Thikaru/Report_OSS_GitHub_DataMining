@@ -13,7 +13,7 @@ CLONE = 'clone'
 LOG = 'log'
 GITHUB_CLONE_PREFIX = 'https://github.com/'
 
-GITHUB_REPOSITORY = "GitHubRepository/"
+GITHUB_REPOSITORY = "GitHubCloneRepository/"
 
 DATA_MINING_DIR_CSV = 'Output_Mining_Data/csv/'
 DATA_MINING_DIR_TEXT = 'Output_Mining_Data/text/'
